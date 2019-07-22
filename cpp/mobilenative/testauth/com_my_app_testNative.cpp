@@ -10,7 +10,7 @@ using namespace std ;
  */
 JNIEXPORT void JNICALL Java_com_my_app_testNative_hello
   (JNIEnv *, jclass) {
-  	cout << "faceNative:Hello" << endl ;
+  	cout << "testNative:Hello" << endl ;
   }
 
 /*
