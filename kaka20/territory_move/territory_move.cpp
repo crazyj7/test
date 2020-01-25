@@ -333,6 +333,8 @@ int solution(vector<vector<int>> land, int height) {
 	//for (auto x : allbridge) {
 	//	printf("%d\n", x[0]);
 	//}
+
+	t1 = clock_milli();
 	while (groupcnt>1) {
 		int mincost = 99999;
 		int mincostgroup = 0;
@@ -441,6 +443,11 @@ int solution(vector<vector<int>> land, int height) {
 
 		groupcnt--;
 	}
+	t2 = clock_milli();
+	if (idebug) {
+		cout << "Phase2 time=" << t2 - t1 << "ms" << endl;
+	}
+
 
 
 	return answer;
