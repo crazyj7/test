@@ -109,6 +109,14 @@ void print_mat(vector<vector<int>> m)
 	cout << endl;
 }
 
+
+void print_mat(list<vector<int>> m)
+{
+	for (auto i : m) {
+		print_vect(i);
+	}
+	cout << endl;
+}
 void print_mat(deque < vector<int>> m)
 {
 	for (auto i : m) {
@@ -223,6 +231,7 @@ int solution(vector<vector<int>> land, int height) {
 				//grouplist[gi] = vector<pair<int, int>>{ make_pair(i, j) };
 				//grouplist[gi] = list<pair<int, int>>{ make_pair(i, j) };
 				grouplist[gi] = vector<int>{ i * n + j };
+				grouplist[gi].reserve(3000);
 
 			}
 			bool canr = false;
@@ -320,7 +329,12 @@ int solution(vector<vector<int>> land, int height) {
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Phase2 . search the lowest cost path.
-	deque<vector<int>> allbridge;
+	//deque<vector<int>> allbridge;
+	vector<vector<int>> allbridge;
+	allbridge.reserve(10000);	// 만개의 그룹 공간 예약.
+	//list<vector<int>> allbridge;
+	//unordered_map<int, vector<vector<int>>> allbridge;	// key is groupid
+	//unordered_map<int, int> allbridge_mincost;
 
 	//int tmpb[6] = { 1,2,3,4,5,6 };
 	//vector<int> r(tmpb, tmpb + 6);
@@ -334,6 +348,10 @@ int solution(vector<vector<int>> land, int height) {
 	//	printf("%d\n", x[0]);
 	//}
 
+	int old_mincost = 99999;
+	int old_groupid = 0;
+	int new_groupid = firstgroupid;
+
 	t1 = clock_milli();
 	while (groupcnt>1) {
 		int mincost = 99999;
@@ -345,7 +363,9 @@ int solution(vector<vector<int>> land, int height) {
 		if (idebug && (groupcnt % 1000 == 1)) {
 			printf("group count=%d\n", groupcnt);
 		}
-
+		if (group1.size() == 0) {
+			//??
+		}
 		for (auto it : group1) {
 			int cost = -1;
 			int gi = -1;
@@ -359,6 +379,7 @@ int solution(vector<vector<int>> land, int height) {
 				cost = abs(land[it.first][it.second] - land[it.first][it.second - 1]);
 				vector<int> tmp{ it.first, it.second, it.first, it.second - 1, gi, cost };
 				allbridge.push_back(tmp);
+				//allbridge[gi].push_back( tmp );
 			}
 
 			// right check 
@@ -370,6 +391,7 @@ int solution(vector<vector<int>> land, int height) {
 				cost = abs(land[it.first][it.second] - land[it.first][it.second + 1]);
 				vector<int> tmp{ it.first, it.second, it.first, it.second + 1, gi, cost };
 				allbridge.push_back(tmp);
+				//allbridge[gi].push_back(tmp);
 			}
 
 			// up check 
@@ -381,6 +403,7 @@ int solution(vector<vector<int>> land, int height) {
 				cost = abs(land[it.first][it.second] - land[it.first-1][it.second]);
 				vector<int> tmp{ it.first, it.second, it.first-1, it.second, gi, cost };
 				allbridge.push_back(tmp);
+				//allbridge[gi].push_back(tmp);
 			}
 
 			// down check 
@@ -392,6 +415,7 @@ int solution(vector<vector<int>> land, int height) {
 				cost = abs(land[it.first][it.second] - land[it.first+1][it.second]);
 				vector<int> tmp{ it.first, it.second, it.first+1, it.second, gi, cost };
 				allbridge.push_back(tmp);
+				//allbridge[gi].push_back(tmp);
 			}
 		}
 		if (idebug>1) {
@@ -486,7 +510,7 @@ int main()
 
 	// 300, 40 ; 103s ; many groups...
 	// 300, 60, 27s	; less group
-	h = 30;
+	h = 60;
 	vector<vector<int>> land;
 	land = make_random(300);
 
